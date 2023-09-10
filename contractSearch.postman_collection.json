@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "572b4028-fbf3-472c-bbec-14f3e93f17ce",
+		"name": "contractSearch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29590418"
+	},
+	"item": [
+		{
+			"name": "Search API",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Load the CSV data\r",
+							"const csvData = pm.iterationData.get(\"searchText\");\r",
+							"\r",
+							"// Set the searchText environment variable\r",
+							"pm.environment.set(\"searchText\", csvData);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Parse the response body as JSON\r",
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"// Define the expected company name\r",
+							"var expectedCompanyName = pm.environment.get(\"searchText\");\r",
+							"\r",
+							"// Check if the company name is present in the response\r",
+							"if(    pm.expect(jsonData.data[0].company).to.equal(expectedCompanyName + \".\"))\r",
+							"{\r",
+							"    pm.test(\"Companyname is Matching with searchText present in the response\", function () {});\r",
+							"}\r",
+							"else if(  pm.expect(jsonData.data[0].company).to.equal(expectedCompanyName))\r",
+							"{\r",
+							"    pm.test(\"Companyname is Matching with searchText present in the responsee\", function () {});\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"     pm.test(\"Companyname is Not Matching with searchText present in the response\", function () {\r",
+							"         pm.expect.fail(\"API Failed\");\r",
+							"     });\r",
+							"    \r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://dev-trade.pocketful.in/api/space/v2/contractdetails/searchScrip?searchText={{searchText}}",
+					"protocol": "https",
+					"host": [
+						"dev-trade",
+						"pocketful",
+						"in"
+					],
+					"path": [
+						"api",
+						"space",
+						"v2",
+						"contractdetails",
+						"searchScrip"
+					],
+					"query": [
+						{
+							"key": "searchText",
+							"value": "{{searchText}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
